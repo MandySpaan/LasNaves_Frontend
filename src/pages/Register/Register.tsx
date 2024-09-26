@@ -1,19 +1,9 @@
 import { useState } from "react";
+import { RegisterPayload, registerUser } from "../../api/authApiCalls";
 import "./Register.css";
 
-interface RegisterFormData {
-  name: string;
-  surname: string;
-  startUp?: string;
-  email: string;
-  dni: string;
-  phone?: string;
-  password: string;
-  confirmPassword: string;
-}
-
 const Register: React.FC = () => {
-  const [formData, setFormData] = useState<RegisterFormData>({
+  const [formData, setFormData] = useState<RegisterPayload>({
     name: "",
     surname: "",
     startUp: "",
@@ -24,16 +14,42 @@ const Register: React.FC = () => {
     confirmPassword: "",
   });
 
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted");
-    //API call to be added here
-  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const payload: RegisterPayload = {
+        name: formData.name,
+        surname: formData.surname,
+        startUp: formData.startUp,
+        email: formData.email,
+        dni: formData.dni,
+        phone: formData.phone,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      };
+
+      await registerUser(payload);
+
+      setSuccessMessage("Registration successful! Please verify your email.");
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
+    }
+  };
   return (
     <div className="register-container">
       <h2>Register</h2>
@@ -100,6 +116,8 @@ const Register: React.FC = () => {
           onChange={handleChange}
           required
         />
+        {error && <p className="error-message">{error}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
         <button type="submit">Register</button>
       </form>
     </div>
