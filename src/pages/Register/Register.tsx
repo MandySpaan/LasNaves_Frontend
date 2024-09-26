@@ -30,24 +30,25 @@ const Register: React.FC = () => {
       return;
     }
 
-    try {
-      const payload: RegisterPayload = {
-        name: formData.name,
-        surname: formData.surname,
-        startUp: formData.startUp,
-        email: formData.email,
-        dni: formData.dni,
-        phone: formData.phone,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
-      };
+    const payload: RegisterPayload = {
+      name: formData.name,
+      surname: formData.surname,
+      startUp: formData.startUp,
+      email: formData.email,
+      dni: formData.dni,
+      phone: formData.phone,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    };
 
-      await registerUser(payload);
+    const response = await registerUser(payload);
 
+    if (response.success) {
       setSuccessMessage("Registration successful! Please verify your email.");
       setError(null);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } else {
+      setError(response.error || "Something went wrong");
+      setSuccessMessage(null);
     }
   };
   return (
