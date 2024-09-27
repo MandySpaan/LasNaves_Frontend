@@ -13,6 +13,11 @@ export interface RegisterPayload {
   confirmPassword: string;
 }
 
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
 export const registerUser = async (
   payload: RegisterPayload
 ): Promise<APIResponse> => {
@@ -20,4 +25,14 @@ export const registerUser = async (
     method: "POST",
     body: JSON.stringify(payload),
   });
+};
+
+export const loginUser = async (
+  payload: LoginPayload
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/auth/login`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return response;
 };
