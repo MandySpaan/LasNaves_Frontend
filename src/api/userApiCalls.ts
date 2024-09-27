@@ -11,3 +11,15 @@ export const getUserDetails = async (token: string): Promise<APIResponse> => {
   });
   return response;
 };
+
+export const getOwnCurrentAccess = async (
+  token: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/user/current-access/own`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
