@@ -1,0 +1,70 @@
+import { useEffect, useState } from "react";
+import { getOwnReservations } from "../../api/userApiCalls";
+import "./UserReservations.css";
+
+const token = localStorage.getItem("token");
+
+const UserReservations: React.FC = () => {
+  const [reservations, setReservations] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const retrieveReservations = async () => {
+      try {
+        const response = await getOwnReservations(token!);
+        setReservations(response.data.reservations || []);
+      } catch (err) {
+        setError("Failed to fetch reservations");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    retrieveReservations();
+  }, []);
+
+  const handleMakeReservation = () => {
+    console.log("Make reservation button clicked.");
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  return (
+    <div className="my-reservations">
+      <h2>My Reservations</h2>
+      {reservations.length > 0 ? (
+        <div className="reservations-list">
+          {reservations.map((reservation, index) => (
+            <div key={index} className="reservation-item">
+              <p>
+                <strong>Room Name:</strong> {reservation.roomName}
+              </p>
+              <p>
+                <strong>Entry Date and Time:</strong>{" "}
+                {new Date(reservation.entryDateTime).toLocaleString()}
+              </p>
+              <p>
+                <strong>Exit Date and Time:</strong>{" "}
+                {new Date(reservation.exitDateTime).toLocaleString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No reservations found.</p>
+      )}
+      <button className="make-reservation-btn" onClick={handleMakeReservation}>
+        Make Reservation
+      </button>
+    </div>
+  );
+};
+
+export default UserReservations;
