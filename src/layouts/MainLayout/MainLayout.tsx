@@ -5,11 +5,13 @@ import "./MainLayout.css";
 
 const MainLayout = () => {
   return (
-    <>
+    <div className="layout-container">
       <Navbar />
-      <Outlet />
+      <div className="main-content">
+        <Outlet />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
