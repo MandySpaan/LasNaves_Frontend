@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginPayload, loginUser } from "../../api/authApiCalls";
 import "./Login.css";
+import { jwtDecode } from "jwt-decode";
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState<LoginPayload>({
@@ -29,7 +30,11 @@ const LoginForm: React.FC = () => {
       const response = await loginUser(formData);
 
       if (response.success) {
-        localStorage.setItem("token", response.data.token || "");
+        const token = response.data.token;
+        const decodedToken: any = jwtDecode(token);
+        const userId = decodedToken.userId;
+        localStorage.setItem("token", token || "");
+        localStorage.setItem("userId", userId || "");
         navigate("/profile");
       } else {
         setError("An unexpected error occurred.");

@@ -41,10 +41,11 @@ const Navbar: React.FC = () => {
               Profile
             </NavLink>
             <NavLink
-              to="/logout"
+              to="/"
               className={({ isActive }) => (isActive ? "active-link" : "")}
               onClick={() => {
                 localStorage.removeItem("token");
+                localStorage.removeItem("userId");
                 closeMenu();
               }}
             >
