@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllRooms } from "../../api/roomApiCalls";
+import { getAllRooms, getCurrentOccupancy } from "../../api/roomApiCalls";
 import "./Rooms.css";
 
 const Rooms: React.FC = () => {
@@ -9,11 +9,18 @@ const Rooms: React.FC = () => {
     const response = await getAllRooms();
     const roomData = response.data.rooms || [];
 
-    const roomsWithOccupancy = roomData.map((room: any) => ({
-      ...room,
-      occupancy: 0,
-      placesAvailable: room.capacity,
-    }));
+    const roomsWithOccupancy = await Promise.all(
+      roomData.map(async (room: any) => {
+        const occupancyResponse = await getCurrentOccupancy(room._id);
+        const occupancyData = occupancyResponse.data.roomOccupancy;
+        return {
+          ...room,
+          occupancy: occupancyData.currentOccupancy,
+          reserved: occupancyData.currentReserved,
+          placesAvailable: occupancyData.placesAvailable,
+        };
+      })
+    );
     setRooms(roomsWithOccupancy);
   };
 
@@ -32,7 +39,7 @@ const Rooms: React.FC = () => {
   return (
     <div className="room-list">
       {rooms.map((room) => (
-        <div className="room-box user-status" key={room.id}>
+        <div className="room-box user-status" key={room._id}>
           <h2>{room.roomName}</h2>
           <p>
             <strong>Room Type:</strong> {room.roomType}
@@ -42,6 +49,9 @@ const Rooms: React.FC = () => {
           </p>
           <p>
             <strong>Occupancy:</strong> {room.occupancy}
+          </p>
+          <p>
+            <strong>Reserved:</strong> {room.reserved}
           </p>
           <p>
             <strong>Places Available:</strong> {room.placesAvailable}

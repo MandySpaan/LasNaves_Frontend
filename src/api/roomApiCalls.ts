@@ -8,3 +8,12 @@ export const getAllRooms = async (): Promise<APIResponse> => {
   });
   return response;
 };
+
+export const getCurrentOccupancy = async (
+  roomId: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/room/occupancy/${roomId}`, {
+    method: "GET",
+  });
+  return response;
+};
