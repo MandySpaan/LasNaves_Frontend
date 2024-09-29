@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllRooms, getCurrentOccupancy } from "../../api/roomApiCalls";
 import { getOwnCurrentAccess } from "../../api/userApiCalls";
-import { checkin } from "../../api/accessApicalls";
+import { checkin, checkout } from "../../api/accessApicalls";
 import LoginRequiredModal from "../../components/Modals/LoginRequiredModal/LoginRequiredModal";
 import "./Rooms.css";
 
@@ -64,7 +64,6 @@ const Rooms: React.FC = () => {
       const response = await checkin(token, roomId);
 
       if (response.success === true) {
-        console.log(`Check-in successful for room ID: ${roomId}`);
         setCheckedInRoomId(roomId);
         fetchRooms();
       } else {
@@ -74,6 +73,28 @@ const Rooms: React.FC = () => {
     } catch (err) {
       console.error("Error during check-in:", err);
       setError("An error occurred during check-in. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckOut = async (token: string, roomId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await checkout(token, roomId);
+
+      if (response.success === true) {
+        setCheckedInRoomId(null);
+        fetchRooms();
+      } else {
+        console.error(`Check-out failed for room ID: ${roomId}`);
+        setError("Check-out failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error during check-out:", err);
+      setError("An error occurred during check-out. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -137,6 +158,15 @@ const Rooms: React.FC = () => {
                 Check In
               </button>
             ) : null}
+            {checkedInRoomId === room._id && (
+              <button
+                className="general-btn checkout-btn"
+                onClick={() => handleCheckOut(token!, room._id)}
+                disabled={loading}
+              >
+                Check Out
+              </button>
+            )}
           </div>
         </div>
       ))}

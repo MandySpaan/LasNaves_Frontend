@@ -14,3 +14,16 @@ export const checkin = async (
   });
   return response;
 };
+
+export const checkout = async (
+  token: string,
+  roomId: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/access/check-out/${roomId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
