@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { getAllRooms, getCurrentOccupancy } from "../../api/roomApiCalls";
+import { getOwnCurrentAccess } from "../../api/userApiCalls";
 import { checkin } from "../../api/accessApicalls";
 import LoginRequiredModal from "../../components/Modals/LoginRequiredModal/LoginRequiredModal";
 import "./Rooms.css";
 
 const Rooms: React.FC = () => {
   const [rooms, setRooms] = useState<any[]>([]);
+  const [checkedInRoomId, setCheckedInRoomId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,8 +40,20 @@ const Rooms: React.FC = () => {
     }
   };
 
+  const getUsersCurrentAccess = async () => {
+    if (token) {
+      const userCurrentAccess = await getOwnCurrentAccess(token);
+      if (userCurrentAccess.data.ownCurrentAccess) {
+        const ownCurrentAccess = userCurrentAccess.data.ownCurrentAccess;
+        const roomId = ownCurrentAccess.roomId;
+        return setCheckedInRoomId(roomId);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchRooms();
+    getUsersCurrentAccess();
   }, []);
 
   const handleCheckIn = async (token: string, roomId: string) => {
@@ -51,6 +65,7 @@ const Rooms: React.FC = () => {
 
       if (response.success === true) {
         console.log(`Check-in successful for room ID: ${roomId}`);
+        setCheckedInRoomId(roomId);
         fetchRooms();
       } else {
         console.error(`Check-in failed for room ID: ${roomId}`);
@@ -108,18 +123,20 @@ const Rooms: React.FC = () => {
           </p>
           <div className="access-details">
             <button
-              className="general-btn checkin-btn"
-              onClick={() => handleCheckInClick(room._id)}
-              disabled={loading}
-            >
-              Check In
-            </button>
-            <button
               className="general-btn"
               onClick={() => handleMakeReservationClick(room._id)}
             >
               Make Reservation
             </button>
+            {!checkedInRoomId ? (
+              <button
+                className="general-btn checkin-btn"
+                onClick={() => handleCheckInClick(room._id)}
+                disabled={loading}
+              >
+                Check In
+              </button>
+            ) : null}
           </div>
         </div>
       ))}
