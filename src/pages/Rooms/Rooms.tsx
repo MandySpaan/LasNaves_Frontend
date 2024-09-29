@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { getAllRooms, getCurrentOccupancy } from "../../api/roomApiCalls";
-import "./Rooms.css";
 import { checkin } from "../../api/accessApicalls";
+import LoginRequiredModal from "../../components/Modals/LoginRequiredModal/LoginRequiredModal";
+import "./Rooms.css";
 
 const Rooms: React.FC = () => {
   const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -62,8 +64,24 @@ const Rooms: React.FC = () => {
     }
   };
 
+  const handleCheckInClick = (roomId: string) => {
+    if (token) {
+      handleCheckIn(token, roomId);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   const handleMakeReservation = (roomId: string) => {
     console.log(`Make Reservation button clicked for room ID: ${roomId}`);
+  };
+
+  const handleMakeReservationClick = (roomId: string) => {
+    if (token) {
+      handleMakeReservation(roomId);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   return (
@@ -91,27 +109,24 @@ const Rooms: React.FC = () => {
           <div className="access-details">
             <button
               className="checkout-btn"
-              onClick={() => {
-                if (token) {
-                  handleCheckIn(token, room._id);
-                } else {
-                  setError("You need to be logged in to check in.");
-                  // Redirect to login page
-                }
-              }}
+              onClick={() => handleCheckInClick(room._id)}
               disabled={loading}
             >
               Check In
             </button>
             <button
               className="checkout-btn"
-              onClick={() => handleMakeReservation(room._id)}
+              onClick={() => handleMakeReservationClick(room._id)}
             >
               Make Reservation
             </button>
           </div>
         </div>
       ))}
+      <LoginRequiredModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
