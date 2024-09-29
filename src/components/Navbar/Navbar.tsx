@@ -1,13 +1,14 @@
-import React from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar: React.FC = () => {
-  const isLoggedIn = !!localStorage.getItem("token");
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const authContext = useContext(AuthContext);
+  const isLoggedIn = authContext?.isLoggedIn;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
@@ -42,10 +43,8 @@ const Navbar: React.FC = () => {
             </NavLink>
             <NavLink
               to="/"
-              className={({ isActive }) => (isActive ? "active-link" : "")}
               onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("userId");
+                authContext?.logout();
                 closeMenu();
               }}
             >

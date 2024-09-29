@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import { LoginPayload, loginUser } from "../../api/authApiCalls";
-import "./Login.css";
 import { jwtDecode } from "jwt-decode";
+import "./Login.css";
 
 const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState<LoginPayload>({
@@ -13,6 +14,7 @@ const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -28,13 +30,13 @@ const LoginForm: React.FC = () => {
 
     try {
       const response = await loginUser(formData);
-
       if (response.success) {
         const token = response.data.token;
         const decodedToken: any = jwtDecode(token);
         const userId = decodedToken.userId;
-        localStorage.setItem("token", token || "");
-        localStorage.setItem("userId", userId || "");
+
+        authContext?.login(token, userId);
+
         navigate("/profile");
       } else {
         setError("An unexpected error occurred.");
