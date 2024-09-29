@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RegisterPayload, registerUser } from "../../api/authApiCalls";
 import "./Register.css";
+import { Link } from "react-router-dom";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterPayload>({
@@ -121,6 +122,9 @@ const Register: React.FC = () => {
         {successMessage && <p className="success-message">{successMessage}</p>}
         <button type="submit">Register</button>
       </form>
+      <div className="login-text">
+        Already have an account? <Link to="/login">Login here</Link>
+      </div>
     </div>
   );
 };

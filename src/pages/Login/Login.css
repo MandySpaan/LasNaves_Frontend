@@ -55,3 +55,8 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  .register-text {
+    text-align: center;
+    margin-top: 20px;
+  }

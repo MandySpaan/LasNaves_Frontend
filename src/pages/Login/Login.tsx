@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { LoginPayload, loginUser } from "../../api/authApiCalls";
 import { jwtDecode } from "jwt-decode";
@@ -79,6 +79,9 @@ const LoginForm: React.FC = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <div className="register-text">
+        Don't have an account yet? <Link to="/register">Register here</Link>
+      </div>
     </div>
   );
 };
