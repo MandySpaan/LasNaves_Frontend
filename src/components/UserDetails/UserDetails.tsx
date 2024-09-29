@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { getUserDetails } from "../../api/userApiCalls";
 import "./UserDetails.css";
 
-const token = localStorage.getItem("token");
-
 const UserDetails: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -11,6 +9,13 @@ const UserDetails: React.FC = () => {
 
   useEffect(() => {
     const retrieveUserDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found");
+        setLoading(false);
+        return;
+      }
+
       try {
         const userDataResult = await getUserDetails(token!);
         const userData = userDataResult.data.user;

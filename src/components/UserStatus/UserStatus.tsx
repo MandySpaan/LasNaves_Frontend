@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { getOwnCurrentAccess } from "../../api/userApiCalls";
 import "./UserStatus.css";
 
-const token = localStorage.getItem("token");
-
 const UserStatus: React.FC = () => {
   const [accessData, setAccessData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -12,6 +10,12 @@ const UserStatus: React.FC = () => {
 
   useEffect(() => {
     const retrieveAccessData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found");
+        setLoading(false);
+        return;
+      }
       try {
         const response = await getOwnCurrentAccess(token!);
         setAccessData(response.data);

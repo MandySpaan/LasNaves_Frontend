@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { getOwnReservations } from "../../api/userApiCalls";
 import "./UserReservations.css";
 
-const token = localStorage.getItem("token");
-
 const UserReservations: React.FC = () => {
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -11,6 +9,12 @@ const UserReservations: React.FC = () => {
 
   useEffect(() => {
     const retrieveReservations = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found");
+        setLoading(false);
+        return;
+      }
       try {
         const response = await getOwnReservations(token!);
         setReservations(response.data.reservations || []);
