@@ -166,15 +166,17 @@ const Rooms: React.FC = () => {
               </button>
             )}
           </div>
+          <ReservationModal
+            isOpen={isReservationModalOpen}
+            onClose={() => setIsReservationModalOpen(false)}
+            token={token!}
+            roomId={room._id}
+          />
         </div>
       ))}
       <LoginRequiredModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-      />
-      <ReservationModal
-        isOpen={isReservationModalOpen}
-        onClose={() => setIsReservationModalOpen(false)}
       />
     </div>
   );

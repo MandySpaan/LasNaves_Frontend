@@ -27,3 +27,24 @@ export const checkout = async (
   });
   return response;
 };
+
+export const reservation = async (
+  token: string,
+  roomId: string,
+  entryDateTimeRaw: Date,
+  exitDateTimeRaw: Date
+): Promise<APIResponse> => {
+  const entryDateTimeStr = entryDateTimeRaw.toISOString().split(".")[0] + "Z";
+  const exitDateTimeStr = exitDateTimeRaw.toISOString().split(".")[0] + "Z";
+  const response = await apiClient(`${URL}/access/reserve/${roomId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      entryDateTime: entryDateTimeStr,
+      exitDateTime: exitDateTimeStr,
+    }),
+  });
+  return response;
+};
