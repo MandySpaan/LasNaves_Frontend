@@ -4,13 +4,15 @@ import { getOwnCurrentAccess } from "../../api/userApiCalls";
 import { checkin, checkout } from "../../api/accessApicalls";
 import LoginRequiredModal from "../../components/Modals/LoginRequiredModal/LoginRequiredModal";
 import "./Rooms.css";
+import ReservationModal from "../../components/Modals/ReservationModal/ReservationModal";
 
 const Rooms: React.FC = () => {
   const [rooms, setRooms] = useState<any[]>([]);
   const [checkedInRoomId, setCheckedInRoomId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
   const token = localStorage.getItem("token");
 
@@ -104,19 +106,15 @@ const Rooms: React.FC = () => {
     if (token) {
       handleCheckIn(token, roomId);
     } else {
-      setIsModalOpen(true);
+      setIsLoginModalOpen(true);
     }
   };
 
-  const handleMakeReservation = (roomId: string) => {
-    console.log(`Make Reservation button clicked for room ID: ${roomId}`);
-  };
-
-  const handleMakeReservationClick = (roomId: string) => {
+  const handleMakeReservationClick = () => {
     if (token) {
-      handleMakeReservation(roomId);
+      setIsReservationModalOpen(true);
     } else {
-      setIsModalOpen(true);
+      setIsLoginModalOpen(true);
     }
   };
 
@@ -145,7 +143,7 @@ const Rooms: React.FC = () => {
           <div className="access-details">
             <button
               className="general-btn"
-              onClick={() => handleMakeReservationClick(room._id)}
+              onClick={() => handleMakeReservationClick()}
             >
               Make Reservation
             </button>
@@ -171,8 +169,12 @@ const Rooms: React.FC = () => {
         </div>
       ))}
       <LoginRequiredModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
+      <ReservationModal
+        isOpen={isReservationModalOpen}
+        onClose={() => setIsReservationModalOpen(false)}
       />
     </div>
   );
