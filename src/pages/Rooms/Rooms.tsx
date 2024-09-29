@@ -108,14 +108,14 @@ const Rooms: React.FC = () => {
           </p>
           <div className="access-details">
             <button
-              className="checkout-btn"
+              className="general-btn checkin-btn"
               onClick={() => handleCheckInClick(room._id)}
               disabled={loading}
             >
               Check In
             </button>
             <button
-              className="checkout-btn"
+              className="general-btn"
               onClick={() => handleMakeReservationClick(room._id)}
             >
               Make Reservation

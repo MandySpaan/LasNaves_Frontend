@@ -66,10 +66,16 @@ const UserDetails: React.FC = () => {
         </p>
       )}
       <div className="user-actions">
-        <button className="manage-user-btn" onClick={handleManageUserDetails}>
+        <button
+          className="general-btn userdetails-btn"
+          onClick={handleManageUserDetails}
+        >
           Manage User Details
         </button>
-        <button className="change-password-btn" onClick={handleChangePassword}>
+        <button
+          className="general-btn userdetails-btn"
+          onClick={handleChangePassword}
+        >
           Change Password
         </button>
       </div>

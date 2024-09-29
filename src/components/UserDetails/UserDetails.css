@@ -28,17 +28,7 @@
   gap: 10px;
 }
 
-.manage-user-btn, .change-password-btn {
-  background-color: #007bff;
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.userdetails-btn {
+  margin-right: auto!important;
 }
 
-.manage-user-btn:hover, .change-password-btn:hover {
-  background-color: #0056b3;
-}

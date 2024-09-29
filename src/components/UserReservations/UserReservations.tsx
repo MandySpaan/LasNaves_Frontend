@@ -60,7 +60,7 @@ const UserReservations: React.FC = () => {
       ) : (
         <p>No reservations found.</p>
       )}
-      <button className="make-reservation-btn" onClick={handleMakeReservation}>
+      <button className="general-btn" onClick={handleMakeReservation}>
         Make Reservation
       </button>
     </div>

@@ -54,7 +54,7 @@ const UserStatus: React.FC = () => {
               accessData.ownCurrentAccess.entryDateTime
             ).toLocaleString()}
           </p>
-          <button className="checkout-btn" onClick={handleCheckout}>
+          <button className="general-btn checkout-btn" onClick={handleCheckout}>
             Checkout
           </button>
         </div>
