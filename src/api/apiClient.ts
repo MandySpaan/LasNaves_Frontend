@@ -15,13 +15,14 @@ export const apiClient = async <T = any>(
   url: string,
   options: RequestInit = {}
 ): Promise<APIResponse<T>> => {
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
   try {
     const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
       ...options,
+      headers: defaultHeaders,
     });
 
     const data = await response.json();
