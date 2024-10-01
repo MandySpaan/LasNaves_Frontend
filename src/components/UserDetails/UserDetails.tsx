@@ -1,38 +1,40 @@
 import { useEffect, useState } from "react";
 import { getUserDetails } from "../../api/userApiCalls";
+import EditMyUserDetailsModal from "../Modals/EditMyUserDetailsModal/EditMyUserDetailsModal";
 import "./UserDetails.css";
 
 const UserDetails: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditMyUserDetailsModalOpen, setIsEditMyUserDetailsModalOpen] =
+    useState(false);
+
+  const retrieveUserDetails = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No token found");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const userDataResult = await getUserDetails(token!);
+      const userData = userDataResult.data.user;
+      setUser(userData);
+    } catch (err) {
+      setError("Failed to fetch user details");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const retrieveUserDetails = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No token found");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const userDataResult = await getUserDetails(token!);
-        const userData = userDataResult.data.user;
-        setUser(userData);
-      } catch (err) {
-        setError("Failed to fetch user details");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     retrieveUserDetails();
   }, []);
 
-  const handleManageUserDetails = () => {
-    // Open a modal for changing user details
-    console.log("Manage User Details clicked");
+  const handleEditMyUserDetails = () => {
+    setIsEditMyUserDetailsModalOpen(true);
   };
 
   const handleChangePassword = () => {
@@ -73,9 +75,9 @@ const UserDetails: React.FC = () => {
       <div className="user-actions">
         <button
           className="general-btn userdetails-btn"
-          onClick={handleManageUserDetails}
+          onClick={handleEditMyUserDetails}
         >
-          Manage User Details
+          Edit My User Details
         </button>
         <button
           className="general-btn userdetails-btn"
@@ -84,6 +86,12 @@ const UserDetails: React.FC = () => {
           Change Password
         </button>
       </div>
+      <EditMyUserDetailsModal
+        isOpen={isEditMyUserDetailsModalOpen}
+        onClose={() => setIsEditMyUserDetailsModalOpen(false)}
+        user={user}
+        onUpdate={() => retrieveUserDetails()}
+      />
     </div>
   );
 };
