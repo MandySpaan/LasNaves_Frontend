@@ -13,6 +13,7 @@ const Rooms: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const [selectedRoomId, setSelectedRoomsId] = useState<string | null>(null);
 
   const token = localStorage.getItem("token");
 
@@ -110,8 +111,9 @@ const Rooms: React.FC = () => {
     }
   };
 
-  const handleMakeReservationClick = () => {
+  const handleMakeReservationClick = (roomId: string) => {
     if (token) {
+      setSelectedRoomsId(roomId);
       setIsReservationModalOpen(true);
     } else {
       setIsLoginModalOpen(true);
@@ -143,7 +145,7 @@ const Rooms: React.FC = () => {
           <div className="access-details">
             <button
               className="general-btn"
-              onClick={() => handleMakeReservationClick()}
+              onClick={() => handleMakeReservationClick(room._id)}
             >
               Make Reservation
             </button>
@@ -166,17 +168,17 @@ const Rooms: React.FC = () => {
               </button>
             )}
           </div>
-          <ReservationModal
-            isOpen={isReservationModalOpen}
-            onClose={() => setIsReservationModalOpen(false)}
-            token={token!}
-            roomId={room._id}
-          />
         </div>
       ))}
       <LoginRequiredModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
+      />
+      <ReservationModal
+        isOpen={isReservationModalOpen}
+        onClose={() => setIsReservationModalOpen(false)}
+        token={token!}
+        roomId={selectedRoomId!}
       />
     </div>
   );
