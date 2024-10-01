@@ -5,12 +5,11 @@ import "./Profile.css";
 
 const Profile = () => {
   return (
-    <>
-      <h1>Profile</h1>
+    <div className="profile-list">
       <UserStatus />
       <UserReservations />
       <UserDetails />
-    </>
+    </div>
   );
 };
 

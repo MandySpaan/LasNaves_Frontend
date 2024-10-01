@@ -1,11 +1,13 @@
 .my-reservations {
-  background-color: #f9f9f9;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 20px;
-  margin: 20px 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.33% - 20px);
   max-width: 400px;
+  min-width: 320px;
+  box-sizing: border-box;
 }
 
 .my-reservations h2 {
