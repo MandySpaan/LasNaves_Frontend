@@ -37,10 +37,11 @@ const UserDetails: React.FC = () => {
     setIsEditMyUserDetailsModalOpen(true);
   };
 
-  const handleChangePassword = () => {
-    // Open a modal for changing password
-    console.log("Change Password clicked");
-  };
+  //To do: Implement this function
+  // const handleChangePassword = () => {
+  //   // Open a modal for changing password
+  //   console.log("Change Password clicked");
+  // };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -79,12 +80,12 @@ const UserDetails: React.FC = () => {
         >
           Edit My User Details
         </button>
-        <button
+        {/* <button
           className="general-btn userdetails-btn"
           onClick={handleChangePassword}
         >
           Change Password
-        </button>
+        </button> */}
       </div>
       <EditMyUserDetailsModal
         isOpen={isEditMyUserDetailsModalOpen}

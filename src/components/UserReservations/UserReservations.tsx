@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { getOwnReservations } from "../../api/userApiCalls";
+import { useNavigate } from "react-router-dom";
 import "./UserReservations.css";
 
 const UserReservations: React.FC = () => {
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const retrieveReservations = async () => {
@@ -29,7 +32,7 @@ const UserReservations: React.FC = () => {
   }, []);
 
   const handleMakeReservation = () => {
-    console.log("Make reservation button clicked.");
+    navigate("/rooms");
   };
 
   if (loading) {
