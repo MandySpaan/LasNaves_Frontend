@@ -1,0 +1,63 @@
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.modal-content label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.modal-content input[type="date"],
+.modal-content select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+.modal-content .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.modal-content button[type="submit"] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.modal-content div {
+  width: 100%;
+}
+
+.modal-content button {
+  margin-top: 20px;
+}
+
+.modal-content input[type="date"]:focus,
+.modal-content select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 3px #4CAF50;
+}
