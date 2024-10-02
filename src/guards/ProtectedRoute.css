@@ -1,0 +1,11 @@
+.protected-route h2 {
+    margin-top: 3rem;
+}
+
+.protected-route p {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    margin-top: 1rem;
+}
