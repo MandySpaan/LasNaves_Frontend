@@ -1,7 +1,8 @@
 import { useState } from "react";
-import "./AdminAccessHistory.css";
 import AllAccessHistoryModal from "../../../components/Modals/AllAccessHistoryModal/AllAccessHistoryModal";
 import RoomAccessHistoryModal from "../../../components/Modals/RoomAccessHistoryModal/RoomAccessHistoryModal";
+import UserAccessHistoryModal from "../../../components/Modals/UserAccessHistoryModal/UserAccessHistoryModal";
+import "./AdminAccessHistory.css";
 
 const AdminAccessHistory: React.FC = () => {
   const [isAllHistoryModalOpen, setAllHistoryModalOpen] = useState(false);
@@ -66,13 +67,10 @@ const AdminAccessHistory: React.FC = () => {
         isOpen={isRoomHistoryModalOpen}
         onClose={closeRoomHistoryModal}
       />
-      {/* Placeholder for future modal */}
-      {isUserHistoryModalOpen && (
-        <div className="modal">
-          <p>TimeFrameModal to be added</p>
-          <button onClick={closeUserHistoryModal}>Close</button>
-        </div>
-      )}
+      <UserAccessHistoryModal
+        isOpen={isUserHistoryModalOpen}
+        onClose={closeUserHistoryModal}
+      />
     </div>
   );
 };

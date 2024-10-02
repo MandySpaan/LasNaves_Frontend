@@ -36,3 +36,21 @@ export const getRoomAccessHistoryByDate = async (
   );
   return response;
 };
+
+export const getUserAccessHistoryByDate = async (
+  token: string,
+  userId: string,
+  startDate: string,
+  endDate: string
+): Promise<APIResponse> => {
+  const response = await apiClient(
+    `${URL}/access-history/user/${userId}/date?startDate=${startDate}&endDate=${endDate}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
