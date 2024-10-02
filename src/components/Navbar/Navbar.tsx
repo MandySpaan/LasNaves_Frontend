@@ -6,6 +6,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 const Navbar: React.FC = () => {
   const authContext = useContext(AuthContext);
   const isLoggedIn = authContext?.isLoggedIn;
+  const role = authContext?.role;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -18,6 +19,11 @@ const Navbar: React.FC = () => {
         ☰
       </button>
       <div className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+        {(role === "admin" || role === "superAdmin") && (
+          <NavLink to="/admin" className="admin-link" onClick={closeMenu}>
+            Go to Admin view
+          </NavLink>
+        )}
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? "active-link" : "")}

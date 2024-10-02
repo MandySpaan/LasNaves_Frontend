@@ -17,6 +17,10 @@
     gap: 1rem;
   }
 
+  .admin-link {
+    font-style: italic;
+  }
+
   @media (max-width: 768px) {
     .nav-links {
       flex-direction: column;
