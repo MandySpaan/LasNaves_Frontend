@@ -10,6 +10,16 @@ export interface editOwnUserDetailsPayload {
   phone?: string;
 }
 
+export const getAllUsers = async (token: string): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/user/all`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
 export const getUserDetails = async (token: string): Promise<APIResponse> => {
   const response = await apiClient(`${URL}/user/profile/own`, {
     method: "GET",
