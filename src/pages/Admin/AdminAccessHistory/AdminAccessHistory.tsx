@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AllAccessHistoryModal from "../../../components/Modals/AllAccessHistoryModal/AllAccessHistoryModal";
-import RoomAccessHistoryModal from "../../../components/Modals/RoomAccessHistoryModal/RoomAccessHistoryModal";
-import UserAccessHistoryModal from "../../../components/Modals/UserAccessHistoryModal/UserAccessHistoryModal";
+import AllAccessHistoryModal from "../../../components/Modals/Admin/AllAccessHistoryModal/AllAccessHistoryModal";
+import RoomAccessHistoryModal from "../../../components/Modals/Admin/RoomAccessHistoryModal/RoomAccessHistoryModal";
+import UserAccessHistoryModal from "../../../components/Modals/Admin/UserAccessHistoryModal/UserAccessHistoryModal";
 import "./AdminAccessHistory.css";
 
 const AdminAccessHistory: React.FC = () => {

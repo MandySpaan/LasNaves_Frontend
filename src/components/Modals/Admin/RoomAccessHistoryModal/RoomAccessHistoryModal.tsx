@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { getRoomAccessHistoryByDate } from "../../../api/accessHistoryApiCalls";
-import { getAllRooms } from "../../../api/roomApiCalls";
-import "../Modals.css";
+import { getRoomAccessHistoryByDate } from "../../../../api/accessHistoryApiCalls";
+import { getAllRooms } from "../../../../api/roomApiCalls";
+import "../../Modals.css";
 import "./RoomAccessHistoryModal.css";
 
 interface RoomAccessHistoryModalProps {

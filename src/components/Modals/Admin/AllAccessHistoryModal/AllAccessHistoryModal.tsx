@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { getAllAccessHistoryByDate } from "../../../api/accessHistoryApiCalls";
-import "../Modals.css";
+import { getAllAccessHistoryByDate } from "../../../../api/accessHistoryApiCalls";
+import "../../Modals.css";
 import "./AllAccessHistoryModal.css";
 
 interface AllAccessHistoryModalProps {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { getAllUsers } from "../../../api/userApiCalls";
-import { getUserAccessHistoryByDate } from "../../../api/accessHistoryApiCalls";
-import "../Modals.css";
+import { getAllUsers } from "../../../../api/userApiCalls";
+import { getUserAccessHistoryByDate } from "../../../../api/accessHistoryApiCalls";
+import "../../Modals.css";
 import "./UserAccessHistoryModal.css";
 
 interface UserAccessHistoryModalProps {
