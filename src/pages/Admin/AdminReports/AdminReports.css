@@ -1,0 +1,72 @@
+.admin-reports {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.admin-reports h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.admin-reports-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.generate-report {
+    display: flex;
+}
+
+.generate-report-button {
+    background-color: #4CAF50;
+    color: white;
+    height: 40px;
+    padding: 10px 20px;
+    margin-top: 35px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+.generate-report-button:hover {
+    background-color: #45a049;
+}
+
+.success-message {
+    color: #4CAF50;
+    text-align: left;
+}
+
+.error-message {
+    color: #f44336;
+    text-align: left;
+}
+
+.reports-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.report-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.report-item:hover {
+    background-color: #f2f2f2;
+}
+
+.report-item a {
+    text-decoration: none;
+    color: #1a73e8;
+}
+
+.report-item a:hover {
+    text-decoration: underline;
+}
