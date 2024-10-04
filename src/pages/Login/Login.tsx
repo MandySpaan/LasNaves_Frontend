@@ -1,7 +1,11 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { LoginPayload, loginUser } from "../../api/authApiCalls";
+import {
+  LoginPayload,
+  loginUser,
+  resendVerificationEmail,
+} from "../../api/authApiCalls";
 import { jwtDecode } from "jwt-decode";
 import "./Login.css";
 
@@ -11,7 +15,11 @@ const LoginForm: React.FC = () => {
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [messageLink, setMessageLink] = useState<string | null>(null);
+  const [messageEmailSent, setMessageEmailSent] = useState<string | null>(null);
+  const [showEmailSent, setShowEmailSent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showResendEmail, setShowResendEmail] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
@@ -39,10 +47,36 @@ const LoginForm: React.FC = () => {
 
         navigate("/profile");
       } else {
-        setError("An unexpected error occurred.");
+        setError(response.error || "An unexpected error occurred.");
+        if (
+          response.error ===
+          "Email is not verified. Please verify your email first."
+        ) {
+          setShowEmailSent(false);
+          setMessageLink("Resend verification email");
+          setShowResendEmail(true);
+        }
       }
     } catch (error) {
       setError("Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendEmail = async () => {
+    setLoading(true);
+    setShowResendEmail(false);
+    try {
+      const response = await resendVerificationEmail(formData.email);
+      if (response.success) {
+        setMessageEmailSent("Verification email sent successfully.");
+        setShowEmailSent(true);
+      } else {
+        setError(response.error || "An unexpected error occurred.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
@@ -74,7 +108,13 @@ const LoginForm: React.FC = () => {
             required
           />
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="error">{error}</p>}
+        {showResendEmail && (
+          <div className="send-email-link" onClick={handleResendEmail}>
+            {messageLink}
+          </div>
+        )}
+        {showEmailSent && <p className="email-sent-text">{messageEmailSent}</p>}
         <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>

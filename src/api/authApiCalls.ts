@@ -36,3 +36,13 @@ export const loginUser = async (
   });
   return response;
 };
+
+export const resendVerificationEmail = async (
+  userEmail: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/auth/resend-verification`, {
+    method: "POST",
+    body: JSON.stringify({ email: userEmail }),
+  });
+  return response;
+};
