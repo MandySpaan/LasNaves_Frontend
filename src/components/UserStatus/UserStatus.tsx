@@ -1,38 +1,53 @@
 import { useEffect, useState } from "react";
 import { getOwnCurrentAccess } from "../../api/userApiCalls";
+import { checkout } from "../../api/accessApicalls";
 import "./UserStatus.css";
 
 const UserStatus: React.FC = () => {
   const [accessData, setAccessData] = useState<any>(null);
+  const [roomId, setRoomId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+
+  const token = localStorage.getItem("token");
+
+  const retrieveAccessData = async () => {
+    if (!token) {
+      setError("No token found");
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await getOwnCurrentAccess(token!);
+      setAccessData(response.data);
+      setRoomId(response.data.ownCurrentAccess.roomId);
+    } catch (err) {
+      setError("Failed to fetch access data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const retrieveAccessData = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No token found");
-        setLoading(false);
-        return;
-      }
-      try {
-        const response = await getOwnCurrentAccess(token!);
-        setAccessData(response.data);
-      } catch (err) {
-        setError("Failed to fetch access data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     retrieveAccessData();
   }, []);
 
-  const handleCheckout = async () => {
-    // Implement the checkout functionality here
-    console.log("Checkout button clicked");
-    setCheckoutMessage("Checking out...");
+  const handleCheckOut = async (token: string, roomId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await checkout(token, roomId);
+
+      if (response.success === true) {
+        retrieveAccessData();
+      }
+    } catch (err) {
+      console.error("Error during check-out:", err);
+      setError("An error occurred during check-out. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -58,14 +73,16 @@ const UserStatus: React.FC = () => {
               accessData.ownCurrentAccess.entryDateTime
             ).toLocaleString()}
           </p>
-          <button className="general-btn checkout-btn" onClick={handleCheckout}>
+          <button
+            className="general-btn checkout-btn"
+            onClick={() => handleCheckOut(token!, roomId)}
+          >
             Checkout
           </button>
         </div>
       ) : (
         <p>You are currently not checked in anywhere.</p>
       )}
-      {checkoutMessage && <p className="checkout-message">{checkoutMessage}</p>}
     </div>
   );
 };
