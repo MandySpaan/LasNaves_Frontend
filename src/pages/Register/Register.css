@@ -1,6 +1,7 @@
 .register-container {
   max-width: 400px;
   margin: 0 auto;
+  margin-top: 20px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -48,14 +49,25 @@
 
 .error-message {
   color: red;
-  text-align: center;
+  text-align: center!important;
   margin-top: -10px;
 }
 
 .success-message {
-  color: green;
+  color: rgb(0, 112, 0);
+  font-weight: bold;
+  text-align: center!important;
+}
+
+.tohomepage {
   text-align: center;
-  margin-top: -10px;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.tohomepage a {
+  color: rgb(92, 92, 92);
+  ;
 }
 
 .login-text {

@@ -16,6 +16,7 @@ const Register: React.FC = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [formVisible, setFormVisible] = useState<boolean>(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +47,7 @@ const Register: React.FC = () => {
 
     if (response.success) {
       setSuccessMessage("Registration successful! Please verify your email.");
+      setFormVisible(false);
       setError(null);
     } else {
       setError(response.error || "Something went wrong");
@@ -55,76 +57,87 @@ const Register: React.FC = () => {
   return (
     <div className="register-container">
       <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="surname"
-          placeholder="Surname"
-          value={formData.surname}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="startUp"
-          placeholder="Startup (optional)"
-          value={formData.startUp}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="dni"
-          placeholder="DNI"
-          value={formData.dni}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone (optional)"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
-        {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        <button type="submit">Register</button>
-      </form>
-      <div className="login-text">
-        Already have an account? <Link to="/login">Login here</Link>
-      </div>
+      {formVisible && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="surname"
+            placeholder="Surname"
+            value={formData.surname}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="startUp"
+            placeholder="Startup (optional)"
+            value={formData.startUp}
+            onChange={handleChange}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="dni"
+            placeholder="DNI"
+            value={formData.dni}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone (optional)"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          {error && <p className="error-message">{error}</p>}
+          <button type="submit">Register</button>
+        </form>
+      )}
+      {formVisible && (
+        <div className="login-text">
+          Already have an account? <Link to="/login">Login here</Link>
+        </div>
+      )}
+      {successMessage && (
+        <div>
+          <p className="success-message">{successMessage}</p>
+          <p className="tohomepage">
+            Click <Link to="/">here</Link> to go to the Home page
+          </p>
+        </div>
+      )}
     </div>
   );
 };
