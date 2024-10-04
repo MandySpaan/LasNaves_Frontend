@@ -28,7 +28,8 @@ export const apiClient = async <T = any>(
     const data = await response.json();
 
     if (!response.ok) {
-      const errorMessage = data.message || "Something went wrong";
+      const errorMessage =
+        data.message || data.errors[0].msg || "Something went wrong";
       throw new APIError(errorMessage, response.status);
     }
 
