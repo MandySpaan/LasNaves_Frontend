@@ -48,3 +48,16 @@ export const reservation = async (
   });
   return response;
 };
+
+export const cancelReservation = async (
+  token: string,
+  accessId: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/access/cancel/${accessId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};

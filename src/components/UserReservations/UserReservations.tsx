@@ -1,39 +1,51 @@
 import { useEffect, useState } from "react";
 import { getOwnReservations } from "../../api/userApiCalls";
 import { useNavigate } from "react-router-dom";
-import "./UserReservations.css";
 import { formatDateTime } from "../../utils/dateUtils";
+import CancelReservationModal from "../Modals/CancelReservationModal/CancelReservationModal";
+import "./UserReservations.css";
 
 const UserReservations: React.FC = () => {
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCancelReservationModalOpen, setIsCancelReservationModalOpen] =
+    useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const retrieveReservations = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No token found");
-        setLoading(false);
-        return;
-      }
-      try {
-        const response = await getOwnReservations(token!);
-        setReservations(response.data.reservations || []);
-      } catch (err) {
-        setError("Failed to fetch reservations");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const retrieveReservations = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No token found");
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await getOwnReservations(token!);
+      setReservations(response.data.reservations || []);
+    } catch (err) {
+      setError("Failed to fetch reservations");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     retrieveReservations();
   }, []);
 
   const handleMakeReservation = () => {
     navigate("/rooms");
+  };
+
+  const clickCancelReservation = () => {
+    setIsCancelReservationModalOpen(true);
+  };
+
+  const closeCancelReservationModal = () => {
+    retrieveReservations();
+    setIsCancelReservationModalOpen(false);
   };
 
   if (loading) {
@@ -71,6 +83,15 @@ const UserReservations: React.FC = () => {
       <button className="general-btn" onClick={handleMakeReservation}>
         Make Reservation
       </button>
+      <button className="general-btn" onClick={clickCancelReservation}>
+        Cancel Reservation
+      </button>
+      {isCancelReservationModalOpen && (
+        <CancelReservationModal
+          reservations={reservations}
+          onClose={closeCancelReservationModal}
+        />
+      )}
     </div>
   );
 };
