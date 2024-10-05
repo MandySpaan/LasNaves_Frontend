@@ -80,9 +80,11 @@ const UserReservations: React.FC = () => {
       <button className="general-btn" onClick={handleMakeReservation}>
         Make Reservation
       </button>
-      <button className="general-btn" onClick={clickCancelReservation}>
-        Cancel Reservation
-      </button>
+      {reservations.length > 0 && (
+        <button className="general-btn" onClick={clickCancelReservation}>
+          Cancel Reservation
+        </button>
+      )}
       {isCancelReservationModalOpen && (
         <CancelReservationModal
           reservations={reservations}

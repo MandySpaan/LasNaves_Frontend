@@ -24,10 +24,14 @@ const CancelReservationModal: React.FC<CancelReservationProps> = ({
     null
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleCancel = async () => {
-    if (!selectedReservation) return;
+    if (!selectedReservation) {
+      setError("Please select a reservation to cancel");
+      return;
+    }
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -39,8 +43,8 @@ const CancelReservationModal: React.FC<CancelReservationProps> = ({
     try {
       const response = await cancelReservation(token, selectedReservation);
       if (response.success) {
-        alert("Reservation canceled successfully");
-        onClose();
+        setError(null);
+        setSuccessMessage("Reservation canceled successfully");
       } else {
         setError("Failed to cancel reservation");
       }
@@ -62,30 +66,36 @@ const CancelReservationModal: React.FC<CancelReservationProps> = ({
           &times;
         </button>
         <h3>Cancel Reservation</h3>
-        {error && <p className="error-message">{error}</p>}
-        <select
-          id="reservation-select"
-          value={selectedReservation || ""}
-          onChange={(e) => setSelectedReservation(e.target.value)}
-        >
-          <option value="" disabled>
-            Select a reservation
-          </option>
-          {reservations.map((reservation) => (
-            <option key={reservation.accessId} value={reservation.accessId}>
-              {`${reservation.roomName} - ${formatDateTime(
-                reservation.entryDateTime
-              )} to ${formatTime(reservation.exitDateTime)}`}
-            </option>
-          ))}
-        </select>
-        <button
-          className="general-btn checkout-btn"
-          onClick={handleCancel}
-          disabled={loading}
-        >
-          {loading ? "Cancelling..." : "Cancel Reservation"}
-        </button>
+        {!successMessage && (
+          <div className="select-and-button">
+            <select
+              id="reservation-select"
+              value={selectedReservation || ""}
+              onChange={(e) => setSelectedReservation(e.target.value)}
+            >
+              <option value="" disabled>
+                Select a reservation
+              </option>
+              {reservations.map((reservation) => (
+                <option key={reservation.accessId} value={reservation.accessId}>
+                  {`${reservation.roomName} - ${formatDateTime(
+                    reservation.entryDateTime
+                  )} to ${formatTime(reservation.exitDateTime)}`}
+                </option>
+              ))}
+            </select>
+            {error && <p className="error-message">{error}</p>}
+
+            <button
+              className="general-btn checkout-btn"
+              onClick={handleCancel}
+              disabled={loading}
+            >
+              {loading ? "Cancelling..." : "Cancel Reservation"}
+            </button>
+          </div>
+        )}
+        {successMessage && <p className="success-message">{successMessage}</p>}
       </div>
     </div>
   );

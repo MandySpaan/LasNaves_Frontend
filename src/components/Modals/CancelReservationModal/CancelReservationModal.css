@@ -4,6 +4,7 @@
   gap: 15px;
   align-items: center;
   justify-content: center;
+  width: 450px;
 }
 
 .cancel-reservation .modal-content label {
@@ -24,7 +25,15 @@
 
 .cancel-reservation .modal-content .error-message {
   color: red;
-  font-size: 12px;
+  font-size: 16px;
   margin-top: 10px;
   text-align: left;
 }
+
+.cancel-reservation .modal-content .success-message {
+    color: green;
+    font-size: 16px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
