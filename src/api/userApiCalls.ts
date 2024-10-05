@@ -67,3 +67,22 @@ export const updateOwnUserDetails = async (
   });
   return response;
 };
+
+export const changePassword = async (
+  token: string,
+  oldPassword: string,
+  newPassword: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/user/change-password`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+      confirmNewPassword: newPassword,
+    }),
+  });
+  return response;
+};

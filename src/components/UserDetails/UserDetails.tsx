@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { getUserDetails } from "../../api/userApiCalls";
 import EditMyUserDetailsModal from "../Modals/EditMyUserDetailsModal/EditMyUserDetailsModal";
 import "./UserDetails.css";
+import ChangePasswordModal from "../Modals/ChangePasswordModal/ChangePasswordModal";
 
 const UserDetails: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditMyUserDetailsModalOpen, setIsEditMyUserDetailsModalOpen] =
-    useState(false);
+    useState<boolean>(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
+    useState<boolean>(false);
+
+  const token = localStorage.getItem("token");
 
   const retrieveUserDetails = async () => {
-    const token = localStorage.getItem("token");
     if (!token) {
       setError("No token found");
       setLoading(false);
@@ -37,11 +41,9 @@ const UserDetails: React.FC = () => {
     setIsEditMyUserDetailsModalOpen(true);
   };
 
-  //To do: Implement this function
-  // const handleChangePassword = () => {
-  //   // Open a modal for changing password
-  //   console.log("Change Password clicked");
-  // };
+  const handleChangePassword = () => {
+    setIsChangePasswordModalOpen(true);
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -80,18 +82,22 @@ const UserDetails: React.FC = () => {
         >
           Edit My User Details
         </button>
-        {/* <button
+        <button
           className="general-btn userdetails-btn"
           onClick={handleChangePassword}
         >
           Change Password
-        </button> */}
+        </button>
       </div>
       <EditMyUserDetailsModal
         isOpen={isEditMyUserDetailsModalOpen}
         onClose={() => setIsEditMyUserDetailsModalOpen(false)}
         user={user}
         onUpdate={() => retrieveUserDetails()}
+      />
+      <ChangePasswordModal
+        isOpen={isChangePasswordModalOpen}
+        onClose={() => setIsChangePasswordModalOpen(false)}
       />
     </div>
   );
