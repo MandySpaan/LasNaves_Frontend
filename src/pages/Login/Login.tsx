@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import {
   LoginPayload,
   loginUser,
+  requestPasswordReset,
   resendVerificationEmail,
 } from "../../api/authApiCalls";
 import { jwtDecode } from "jwt-decode";
@@ -17,9 +18,7 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [messageLink, setMessageLink] = useState<string | null>(null);
   const [messageEmailSent, setMessageEmailSent] = useState<string | null>(null);
-  const [showEmailSent, setShowEmailSent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [showResendEmail, setShowResendEmail] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
@@ -52,9 +51,11 @@ const LoginForm: React.FC = () => {
           response.error ===
           "Email is not verified. Please verify your email first."
         ) {
-          setShowEmailSent(false);
+          setMessageEmailSent(null);
           setMessageLink("Resend verification email");
-          setShowResendEmail(true);
+        } else if (response.error === "Invalid email or password") {
+          setMessageEmailSent(null);
+          setMessageLink("Send email to reset password");
         }
       }
     } catch (error) {
@@ -64,14 +65,31 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  const handleResendEmail = async () => {
+  const handleResendVerificationEmail = async () => {
     setLoading(true);
-    setShowResendEmail(false);
+    setMessageLink(null);
     try {
       const response = await resendVerificationEmail(formData.email);
       if (response.success) {
-        setMessageEmailSent("Verification email sent successfully.");
-        setShowEmailSent(true);
+        setMessageEmailSent("Verification email sent successfully");
+      } else {
+        setError(response.error || "An unexpected error occurred.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    setLoading(true);
+    setError(null);
+    setMessageLink(null);
+    try {
+      const response = await requestPasswordReset(formData.email);
+      if (response.success) {
+        setMessageEmailSent("Email to reset password sent");
       } else {
         setError(response.error || "An unexpected error occurred.");
       }
@@ -109,14 +127,23 @@ const LoginForm: React.FC = () => {
           />
         </div>
         {error && <p className="error">{error}</p>}
-        {showResendEmail && (
-          <div className="send-email-link" onClick={handleResendEmail}>
+        {messageLink && (
+          <div
+            className="send-email-link"
+            onClick={
+              messageLink === "Resend verification email"
+                ? handleResendVerificationEmail
+                : handleResetPassword
+            }
+          >
             {messageLink}
           </div>
         )}
-        {showEmailSent && <p className="email-sent-text">{messageEmailSent}</p>}
+        {messageEmailSent && (
+          <p className="email-sent-text">{messageEmailSent}</p>
+        )}
         <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Loading..." : "Login"}
         </button>
       </form>
       <div className="register-text">

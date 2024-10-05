@@ -46,3 +46,13 @@ export const resendVerificationEmail = async (
   });
   return response;
 };
+
+export const requestPasswordReset = async (
+  userEmail: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/auth/request-password-reset`, {
+    method: "POST",
+    body: JSON.stringify({ email: userEmail }),
+  });
+  return response;
+};
