@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getOwnReservations } from "../../api/userApiCalls";
 import { useNavigate } from "react-router-dom";
-import { formatDateTime } from "../../utils/dateUtils";
+import { formatDateTime, formatTime } from "../../utils/dateUtils";
 import CancelReservationModal from "../Modals/CancelReservationModal/CancelReservationModal";
 import "./UserReservations.css";
 
@@ -67,12 +67,9 @@ const UserReservations: React.FC = () => {
                 <strong>Room Name:</strong> {reservation.roomName}
               </p>
               <p>
-                <strong>Entry Date and Time:</strong>{" "}
-                {formatDateTime(reservation.entryDateTime)}
-              </p>
-              <p>
-                <strong>Exit Date and Time:</strong>{" "}
-                {formatDateTime(reservation.exitDateTime)}
+                <strong>Date:</strong>{" "}
+                {formatDateTime(reservation.entryDateTime)} to{" "}
+                {formatTime(reservation.exitDateTime)}
               </p>
             </div>
           ))}

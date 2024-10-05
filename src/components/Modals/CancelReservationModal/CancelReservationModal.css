@@ -1,19 +1,19 @@
-.modal-content {
+.cancel-reservation .modal-content {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 
-.modal-content label {
+.cancel-reservation .modal-content label {
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
   color: #333;
 }
 
-.modal-content select {
+.cancel-reservation .modal-content select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -22,7 +22,7 @@
   background-color: #f9f9f9;
 }
 
-.modal-content .error-message {
+.cancel-reservation .modal-content .error-message {
   color: red;
   font-size: 12px;
   margin-top: 10px;

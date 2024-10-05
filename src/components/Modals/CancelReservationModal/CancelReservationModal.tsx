@@ -2,7 +2,7 @@ import { useState } from "react";
 import { cancelReservation } from "../../../api/accessApicalls";
 import "../Modals.css";
 import "./CancelReservationModal.css";
-import { formatDateTime } from "../../../utils/dateUtils";
+import { formatDateTime, formatTime } from "../../../utils/dateUtils";
 
 interface Reservation {
   accessId: string;
@@ -56,7 +56,7 @@ const CancelReservationModal: React.FC<CancelReservationProps> = ({
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay cancel-reservation" onClick={onClose}>
       <div className="modal-content" onClick={handleContentClick}>
         <button className="modal-close-x" onClick={onClose}>
           &times;
@@ -75,7 +75,7 @@ const CancelReservationModal: React.FC<CancelReservationProps> = ({
             <option key={reservation.accessId} value={reservation.accessId}>
               {`${reservation.roomName} - ${formatDateTime(
                 reservation.entryDateTime
-              )} to ${formatDateTime(reservation.exitDateTime)}`}
+              )} to ${formatTime(reservation.exitDateTime)}`}
             </option>
           ))}
         </select>
