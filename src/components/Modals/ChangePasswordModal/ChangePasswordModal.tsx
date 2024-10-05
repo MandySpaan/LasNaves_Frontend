@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../Modals.css";
 import "./ChangePasswordModal.css";
 import { changePassword } from "../../../api/userApiCalls";
@@ -19,6 +19,14 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setError(null);
+    setSuccessMessage(null);
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +103,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
             </button>
           </form>
         )}
-        {successMessage && <p className="success">{successMessage}</p>}
+        {successMessage && <p className="update-success">{successMessage}</p>}
       </div>
     </div>
   );
