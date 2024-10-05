@@ -24,10 +24,10 @@
 }
 
 .modal-content .error-message {
-  color: red;
-  font-size: 12px;
   margin-top: 10px;
-  text-align: left;
+  margin-bottom: 0px;
+  align-content: center;
+  width: 100%;
 }
 
 .modal-content button[type="submit"] {

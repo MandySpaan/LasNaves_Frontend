@@ -46,3 +46,9 @@
 .modal-link:hover {
   text-decoration: underline;
 }
+
+.modal-content .error {
+  color: red;
+  width: 100%;
+  align-content: center;
+}

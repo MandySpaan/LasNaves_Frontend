@@ -52,7 +52,7 @@ const ReservationModal: React.FC<ModalProps> = ({
         exitDateTime
       );
       if (!response.success) {
-        setError("Failed to reserve place");
+        setError(response.error || "Failed to reserve place");
       } else {
         navigate("/profile");
       }
