@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getOwnReservations } from "../../api/userApiCalls";
 import { useNavigate } from "react-router-dom";
 import "./UserReservations.css";
+import { formatDateTime } from "../../utils/dateUtils";
 
 const UserReservations: React.FC = () => {
   const [reservations, setReservations] = useState<any[]>([]);
@@ -55,11 +56,11 @@ const UserReservations: React.FC = () => {
               </p>
               <p>
                 <strong>Entry Date and Time:</strong>{" "}
-                {new Date(reservation.entryDateTime).toLocaleString()}
+                {formatDateTime(reservation.entryDateTime)}
               </p>
               <p>
                 <strong>Exit Date and Time:</strong>{" "}
-                {new Date(reservation.exitDateTime).toLocaleString()}
+                {formatDateTime(reservation.exitDateTime)}
               </p>
             </div>
           ))}

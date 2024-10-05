@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getOwnCurrentAccess } from "../../api/userApiCalls";
 import { checkout } from "../../api/accessApicalls";
 import "./UserStatus.css";
+import { formatDateTime } from "../../utils/dateUtils";
 
 const UserStatus: React.FC = () => {
   const [accessData, setAccessData] = useState<any>(null);
@@ -69,9 +70,7 @@ const UserStatus: React.FC = () => {
           </p>
           <p>
             <strong>Entry Date and Time:</strong>{" "}
-            {new Date(
-              accessData.ownCurrentAccess.entryDateTime
-            ).toLocaleString()}
+            {formatDateTime(accessData.ownCurrentAccess.entryDateTime)}
           </p>
           <button
             className="general-btn checkout-btn"
