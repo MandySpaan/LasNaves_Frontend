@@ -43,3 +43,23 @@
 .rooms-table td {
     text-align: center;
 }
+.rooms-table td {
+    vertical-align: top;
+    padding-top: 20px;
+}
+
+.places-available {
+    padding-left: 70px!important;
+    padding-right: 70px!important;
+}
+
+.users-present ul {
+    list-style-type: none;
+    text-align: left;;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.users-present li {
+    margin-bottom: 10px;
+}

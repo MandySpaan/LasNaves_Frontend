@@ -104,8 +104,8 @@ const AdminRooms: React.FC = () => {
               <td>{room.capacity}</td>
               <td>{room.occupancy}</td>
               <td>{room.reserved}</td>
-              <td>{room.placesAvailable}</td>
-              <td>
+              <td className="places-available">{room.placesAvailable}</td>
+              <td className="users-present">
                 {room.usersPresent.length > 0 ? (
                   <ul>
                     {room.usersPresent.map((user, index) => (
