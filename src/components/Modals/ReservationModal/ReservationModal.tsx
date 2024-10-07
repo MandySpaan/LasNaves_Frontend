@@ -40,7 +40,7 @@ const ReservationModal: React.FC<ModalProps> = ({
     const exitDateTime = new Date(`${entryDate}T${exitTime}`);
 
     if (entryDateTime >= exitDateTime) {
-      setError("Exit time must be later than entry time.");
+      setError("The entry time must be before the exit time");
       return;
     }
 
