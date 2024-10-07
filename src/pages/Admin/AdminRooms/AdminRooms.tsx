@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
+import {
+  getAllRooms,
+  getCurrentOccupancy,
+  getOccupancyUsersList,
+} from "../../../api/roomApiCalls";
 import "./AdminRooms.css";
-import { getAllRooms, getCurrentOccupancy } from "../../../api/roomApiCalls";
+import { formatDateTime } from "../../../utils/dateUtils";
 
 interface Room {
   _id: string;
@@ -10,6 +15,12 @@ interface Room {
   occupancy: number;
   reserved: number;
   placesAvailable: number;
+  usersPresent: {
+    status: string;
+    userName: string;
+    accessDateTime: string;
+    exitDateTime?: string;
+  }[];
 }
 
 const AdminRooms: React.FC = () => {
@@ -17,25 +28,39 @@ const AdminRooms: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const token = localStorage.getItem("token");
+
   const fetchRooms = async () => {
     setLoading(true);
     try {
       const response = await getAllRooms();
       const roomData = response.data.rooms || [];
 
-      const roomsWithOccupancy = await Promise.all(
+      const roomsWithDetails = await Promise.all(
         roomData.map(async (room: any) => {
           const occupancyResponse = await getCurrentOccupancy(room._id);
           const occupancyData = occupancyResponse.data.roomOccupancy;
+
+          const usersResponse = await getOccupancyUsersList(token!, room._id);
+          const usersData = usersResponse.data.roomStatus.access || [];
+
+          const usersPresent = usersData.map((user: any) => ({
+            status: user.status,
+            userName: user.userName,
+            accessDateTime: user.accessDateTime,
+            exitDateTime: user.exitDateTime || null,
+          }));
+
           return {
             ...room,
             occupancy: occupancyData.currentOccupancy,
             reserved: occupancyData.currentReserved,
             placesAvailable: occupancyData.placesAvailable,
+            usersPresent,
           };
         })
       );
-      setRooms(roomsWithOccupancy);
+      setRooms(roomsWithDetails);
     } catch (err) {
       console.error("Failed to fetch rooms", err);
       setError("Failed to fetch rooms");
@@ -68,6 +93,7 @@ const AdminRooms: React.FC = () => {
             <th>Occupancy</th>
             <th>Reserved</th>
             <th>Places Available</th>
+            <th>Users Present</th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +105,30 @@ const AdminRooms: React.FC = () => {
               <td>{room.occupancy}</td>
               <td>{room.reserved}</td>
               <td>{room.placesAvailable}</td>
+              <td>
+                {room.usersPresent.length > 0 ? (
+                  <ul>
+                    {room.usersPresent.map((user, index) => (
+                      <li key={index}>
+                        <strong>User:</strong> {user.userName}{" "}
+                        {`(${user.status})`}
+                        <br />
+                        <strong>Access Time:</strong>{" "}
+                        {formatDateTime(user.accessDateTime)}
+                        <br />
+                        {user.exitDateTime && (
+                          <>
+                            <strong>Exit Time:</strong>{" "}
+                            {formatDateTime(user.exitDateTime)}
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No users present</p>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

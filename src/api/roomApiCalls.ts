@@ -17,3 +17,16 @@ export const getCurrentOccupancy = async (
   });
   return response;
 };
+
+export const getOccupancyUsersList = async (
+  token: string,
+  roomId: string
+): Promise<APIResponse> => {
+  const response = await apiClient(`${URL}/room/status/${roomId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
