@@ -42,14 +42,21 @@ const EditMyUserDetailsModal: React.FC<EditMyUserDetailsModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const areValuesEqual = (
+      newValue: string | undefined,
+      originalValue: string | undefined
+    ) => {
+      return newValue === originalValue || (!newValue && !originalValue);
+    };
+
     if (
-      name === user.name &&
-      surname === user.surname &&
-      startUp === user.startUp &&
-      dni === user.dni &&
-      phone === user.phone
+      areValuesEqual(name, user.name) &&
+      areValuesEqual(surname, user.surname) &&
+      areValuesEqual(startUp, user.startUp) &&
+      areValuesEqual(dni, user.dni) &&
+      areValuesEqual(phone, user.phone)
     ) {
-      setError("No fields have been changed");
+      +setError("No fields have been changed");
       return;
     }
 
