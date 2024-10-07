@@ -1,3 +1,7 @@
+.rooms-page .loading {
+  text-align: center;
+}
+
 .room-list {
   display: flex;
   flex-wrap: wrap;
