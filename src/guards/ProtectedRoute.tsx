@@ -1,6 +1,8 @@
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import useTokenExpired from "../hooks/useTokenExpired";
+import TokenExpiredModal from "../components/Modals/TokenExpiredModal/TokenExpiredModal";
 import "./ProtectedRoute.css";
 
 interface ProtectedRouteProps {
@@ -19,6 +21,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   const { role } = authContext;
+  const { showModal, handleLogin, handleGoHome } = useTokenExpired();
+
+  if (showModal) {
+    return (
+      <TokenExpiredModal onConfirm={handleLogin} onCancel={handleGoHome} />
+    );
+  }
 
   if (requiredRoles.includes(role || "")) {
     return <>{children}</>;
