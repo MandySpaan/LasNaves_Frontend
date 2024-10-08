@@ -9,21 +9,34 @@ const useTokenExpired = () => {
 
   useEffect(() => {
     if (authContext) {
-      const isExpired = authContext.isTokenExpired();
-      if (isExpired) {
-        setShowModal(true);
-      }
+      const checkTokenExpiration = () => {
+        const isExpired = authContext.isTokenExpired();
+        if (isExpired) {
+          setShowModal(true);
+          window.removeEventListener("click", checkTokenExpiration);
+          window.removeEventListener("keydown", checkTokenExpiration);
+        }
+      };
+      checkTokenExpiration();
+      window.addEventListener("click", checkTokenExpiration);
+      window.addEventListener("keydown", checkTokenExpiration);
+
+      return () => {
+        window.removeEventListener("click", checkTokenExpiration);
+        window.removeEventListener("keydown", checkTokenExpiration);
+      };
     }
   }, [authContext]);
 
   const handleLogin = () => {
     setShowModal(false);
+    authContext?.logout();
     navigate("/login");
   };
 
   const handleGoHome = () => {
     setShowModal(false);
-    localStorage.clear();
+    authContext?.logout();
     navigate("/");
   };
 
