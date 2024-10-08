@@ -1,15 +1,17 @@
 import { jwtDecode } from "jwt-decode";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 
 interface AuthContextType {
   isLoggedIn: boolean;
   role: string | null;
   login: (token: string, userId: string) => void;
   logout: () => void;
+  isTokenExpired: () => boolean;
 }
 
 interface DecodedToken {
   role: string;
+  exp: number;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -21,26 +23,47 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     !!localStorage.getItem("token")
   );
   const [role, setRole] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+
+  const isTokenExpired = useCallback(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<DecodedToken>(token);
+        return decodedToken.exp * 1000 < Date.now();
+      } catch (error) {
+        console.error("Invalid token:", error);
+        return true;
+      }
+    }
+    return true;
+  }, [token]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (!token) {
+      setIsLoggedIn(false);
+      setRole(null);
+    } else if (isTokenExpired()) {
+      setIsLoggedIn(false);
+      setRole(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      setToken(null);
+    } else {
       setIsLoggedIn(true);
       const decodedToken = jwtDecode<DecodedToken>(token);
       setRole(decodedToken.role);
-    } else {
-      setIsLoggedIn(false);
-      setRole(null);
     }
-  }, []);
+  }, [token, isTokenExpired]);
 
   const login = (token: string, userId: string) => {
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
+    setToken(token);
 
     const decodedToken = jwtDecode<DecodedToken>(token);
     setRole(decodedToken.role);
-
     setIsLoggedIn(true);
   };
 
@@ -49,10 +72,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("userId");
     setIsLoggedIn(false);
     setRole(null);
+    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, role, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, role, login, logout, isTokenExpired }}
+    >
       {children}
     </AuthContext.Provider>
   );
