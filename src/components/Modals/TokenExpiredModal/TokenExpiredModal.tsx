@@ -8,7 +8,7 @@ interface ModalProps {
 
 const TokenExpiredModal: React.FC<ModalProps> = ({ onConfirm, onCancel }) => {
   return (
-    <div className="modal-overlay">
+    <div className="token-expired modal-overlay">
       <div className="modal-content">
         <p>
           Your session has expired. Please login again or go back to the home
