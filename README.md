@@ -90,10 +90,6 @@ Ongoing work includes the following:
 
 Areas for improvement include the following:
 
-- Usability:
-
-  - Get a message and forwarded to the login page when token expires
-
 - Layout:
 
   - Refactor css files to have more centralized css
