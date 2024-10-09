@@ -4,6 +4,7 @@ import { createContext, useState, useEffect, useCallback } from "react";
 interface AuthContextType {
   isLoggedIn: boolean;
   role: string | null;
+  token: string | null;
   login: (token: string, userId: string) => void;
   logout: () => void;
   isTokenExpired: () => boolean;
@@ -37,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return true;
       }
     }
-    return true;
+    return false;
   }, [token]);
 
   useEffect(() => {
@@ -77,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, role, login, logout, isTokenExpired }}
+      value={{ isLoggedIn, role, token, login, logout, isTokenExpired }}
     >
       {children}
     </AuthContext.Provider>
