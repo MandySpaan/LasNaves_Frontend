@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { reservation } from "../../../api/accessApicalls";
 import "./ReservationModal.css";
@@ -24,11 +24,12 @@ const ReservationModal: React.FC<ModalProps> = ({
 
   const navigate = useNavigate();
 
-  if (!isOpen) return null;
-
-  const handleContentClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
+  useEffect(() => {
+    const today = new Date();
+    const nextWorkday = getNextWorkday(today);
+    const minDate = nextWorkday.toISOString().split("T")[0];
+    setEntryDate((prevDate) => prevDate || minDate);
+  }, []);
 
   const handleReserve = async () => {
     if (!entryDate || !entryTime || !exitTime) {
@@ -74,6 +75,25 @@ const ReservationModal: React.FC<ModalProps> = ({
     return options;
   };
 
+  const isWeekend = (date: Date) => {
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  const getNextWorkday = (date: Date) => {
+    const nextWorkday = new Date(date);
+    while (isWeekend(nextWorkday)) {
+      nextWorkday.setDate(nextWorkday.getDate() + 1);
+    }
+    return nextWorkday;
+  };
+
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  if (!isOpen) return null;
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={handleContentClick}>
@@ -88,12 +108,21 @@ const ReservationModal: React.FC<ModalProps> = ({
           }}
         >
           <div>
-            <label htmlFor="entryDate">Entry Date:</label>
+            <label htmlFor="entryDate">Date:</label>
             <input
               type="date"
               id="entryDate"
               value={entryDate}
-              onChange={(e) => setEntryDate(e.target.value)}
+              min={getNextWorkday(new Date()).toISOString().split("T")[0]}
+              onChange={(e) => {
+                const selectedDate = new Date(e.target.value);
+                setEntryDate(e.target.value);
+                if (isWeekend(selectedDate)) {
+                  setError("Please select a valid workday");
+                } else {
+                  setError(null);
+                }
+              }}
               required
             />
           </div>
@@ -122,7 +151,12 @@ const ReservationModal: React.FC<ModalProps> = ({
 
           {error && <p className="error-message">{error}</p>}
 
-          <button type="submit">Reserve</button>
+          <button
+            type="submit"
+            disabled={error === "Please select a valid workday"}
+          >
+            Reserve
+          </button>
         </form>
       </div>
     </div>
