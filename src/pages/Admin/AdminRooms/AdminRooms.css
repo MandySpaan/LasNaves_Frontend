@@ -53,6 +53,11 @@
     padding-right: 70px!important;
 }
 
+.users-present p {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
 .users-present ul {
     list-style-type: none;
     text-align: left;;

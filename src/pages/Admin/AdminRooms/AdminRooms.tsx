@@ -42,21 +42,25 @@ const AdminRooms: React.FC = () => {
           const occupancyData = occupancyResponse.data.roomOccupancy;
 
           const usersResponse = await getOccupancyUsersList(token!, room._id);
-          const usersData = usersResponse.data.roomStatus.access || [];
+          let usersPresent: any[] = [];
 
-          const usersPresent = usersData.map((user: any) => ({
-            status: user.status,
-            userName: user.userName,
-            accessDateTime: user.accessDateTime,
-            exitDateTime: user.exitDateTime || null,
-          }));
+          if (usersResponse.success) {
+            const usersData = usersResponse.data.roomStatus.access || [];
+
+            usersPresent = usersData.map((user: any) => ({
+              status: user.status,
+              userName: user.userName,
+              accessDateTime: user.accessDateTime,
+              exitDateTime: user.exitDateTime || null,
+            }));
+          }
 
           return {
             ...room,
-            occupancy: occupancyData.currentOccupancy,
-            reserved: occupancyData.currentReserved,
-            placesAvailable: occupancyData.placesAvailable,
-            usersPresent,
+            occupancy: occupancyData.currentOccupancy || 0,
+            reserved: occupancyData.currentReserved || 0,
+            placesAvailable: occupancyData.placesAvailable || 0,
+            usersPresent: usersPresent || [],
           };
         })
       );
@@ -106,7 +110,11 @@ const AdminRooms: React.FC = () => {
               <td>{room.reserved}</td>
               <td className="places-available">{room.placesAvailable}</td>
               <td className="users-present">
-                {room.usersPresent.length > 0 ? (
+                {room.occupancy === 0 &&
+                room.reserved === 0 &&
+                room.usersPresent.length === 0 ? (
+                  <p> No users currently present nor reserved</p>
+                ) : (
                   <ul>
                     {room.usersPresent.map((user, index) => (
                       <li key={index}>
@@ -125,8 +133,6 @@ const AdminRooms: React.FC = () => {
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p>No users present</p>
                 )}
               </td>
             </tr>
