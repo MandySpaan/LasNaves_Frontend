@@ -11,6 +11,7 @@ const Rooms: React.FC = () => {
   const [rooms, setRooms] = useState<any[]>([]);
   const [checkedInRoomId, setCheckedInRoomId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -40,6 +41,7 @@ const Rooms: React.FC = () => {
       setRooms(roomsWithOccupancy);
     } catch (err) {
       console.error("Failed to fetch rooms", err);
+      setFetchError("Failed to fetch rooms");
     } finally {
       setLoading(false);
     }
@@ -123,7 +125,8 @@ const Rooms: React.FC = () => {
 
   return (
     <div className="rooms-page">
-      {loading && <p className="loading">Loading...</p>}
+      {loading && <p className="loading">Loading rooms...</p>}
+      {fetchError && <p className="fetching-error">{fetchError}</p>}
       <div className="room-list">
         {rooms.map((room) => (
           <div className="room-box user-status" key={room._id}>

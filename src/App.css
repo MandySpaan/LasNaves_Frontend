@@ -12,6 +12,11 @@ a:hover {
   cursor: pointer;
 }
 
+.loading, .fetching-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .general-btn {
   background-color: #007bff;

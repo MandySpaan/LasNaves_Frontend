@@ -78,11 +78,11 @@ const AdminRooms: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading rooms...</p>;
+    return <p className="loading">Loading rooms...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="fetching-error">{error}</p>;
   }
 
   return (

@@ -38,11 +38,11 @@ const AdminUsers: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading users...</p>;
+    return <p className="loading">Loading users...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="fetching-error">{error}</p>;
   }
 
   return (
