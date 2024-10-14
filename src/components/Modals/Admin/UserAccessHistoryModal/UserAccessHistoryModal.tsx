@@ -176,6 +176,7 @@ const UserAccessHistoryModal: React.FC<UserAccessHistoryModalProps> = ({
                       - {formatTime(access.exitDateTime)}
                       <br />
                       <strong>Room:</strong> {access.roomName} <br />
+                      <strong>Status:</strong> {access.status} <br />
                     </li>
                   ))}
               </ul>

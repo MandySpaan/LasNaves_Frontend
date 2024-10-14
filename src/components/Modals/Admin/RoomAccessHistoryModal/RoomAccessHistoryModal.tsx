@@ -175,6 +175,7 @@ const RoomAccessHistoryModal: React.FC<RoomAccessHistoryModalProps> = ({
                       <br />
                       <strong>User:</strong> {access.userId.name}{" "}
                       {access.userId.surname} <br />
+                      <strong>Status:</strong> {access.status} <br />
                     </li>
                   ))}
               </ul>
