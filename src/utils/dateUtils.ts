@@ -10,6 +10,14 @@ export const formatDateTime = (dateString: string): string => {
   });
 };
 
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+};
+
 export const formatTime = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleTimeString(undefined, {
