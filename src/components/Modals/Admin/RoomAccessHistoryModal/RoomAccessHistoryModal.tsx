@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getRoomAccessHistoryByDate } from "../../../../api/accessHistoryApiCalls";
 import { getAllRooms } from "../../../../api/roomApiCalls";
+import { formatDate, formatTime } from "../../../../utils/dateUtils";
 import "../../Modals.css";
 import "./RoomAccessHistoryModal.css";
 
@@ -83,6 +84,11 @@ const RoomAccessHistoryModal: React.FC<RoomAccessHistoryModalProps> = ({
     }
   };
 
+  const getSelectedRoomName = () => {
+    const selectedRoom = rooms.find((room) => room._id === selectedRoomId);
+    return selectedRoom ? selectedRoom.roomName : "";
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -147,7 +153,9 @@ const RoomAccessHistoryModal: React.FC<RoomAccessHistoryModalProps> = ({
         ) : (
           <div>
             <h3>
-              {startDate} to {endDate}
+              Access history for the room {getSelectedRoomName()}
+              <br />
+              from {formatDate(startDate)} to {formatDate(endDate)}
             </h3>
             <div className="history-results">
               <ul>
@@ -159,23 +167,14 @@ const RoomAccessHistoryModal: React.FC<RoomAccessHistoryModalProps> = ({
                   )
                   .map((access) => (
                     <li key={access._id}>
-                      <strong>Entry:</strong>{" "}
-                      {new Date(access.entryDateTime).toLocaleDateString()}{" "}
-                      {new Date(access.entryDateTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <strong>Date: </strong>
+                      {formatDate(access.entryDateTime)}
                       <br />
-                      <strong>Exit:</strong>{" "}
-                      {new Date(access.exitDateTime).toLocaleDateString()}{" "}
-                      {new Date(access.exitDateTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <strong>Time:</strong> {formatTime(access.entryDateTime)}{" "}
+                      - {formatTime(access.exitDateTime)}
                       <br />
                       <strong>User:</strong> {access.userId.name}{" "}
                       {access.userId.surname} <br />
-                      <strong>Room:</strong> {access.roomId.roomName} <br />
                     </li>
                   ))}
               </ul>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getAllAccessHistoryByDate } from "../../../../api/accessHistoryApiCalls";
+import { formatDate, formatTime } from "../../../../utils/dateUtils";
 import "../../Modals.css";
 import "./AllAccessHistoryModal.css";
 
@@ -106,7 +107,8 @@ const AllAccessHistoryModal: React.FC<AllAccessHistoryModalProps> = ({
         ) : (
           <div>
             <h3>
-              {startDate} to {endDate}
+              Access history for all rooms and all users <br />
+              from {formatDate(startDate)} to {formatDate(endDate)}
             </h3>
             <div className="history-results">
               <ul>
@@ -118,19 +120,11 @@ const AllAccessHistoryModal: React.FC<AllAccessHistoryModalProps> = ({
                   )
                   .map((access) => (
                     <li key={access._id}>
-                      <strong>Entry:</strong>{" "}
-                      {new Date(access.entryDateTime).toLocaleDateString()}{" "}
-                      {new Date(access.entryDateTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <strong>Date: </strong>
+                      {formatDate(access.entryDateTime)}
                       <br />
-                      <strong>Exit:</strong>{" "}
-                      {new Date(access.exitDateTime).toLocaleDateString()}{" "}
-                      {new Date(access.exitDateTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      <strong>Time:</strong> {formatTime(access.entryDateTime)}{" "}
+                      - {formatTime(access.exitDateTime)}
                       <br />
                       <strong>User:</strong> {access.userId.name}{" "}
                       {access.userId.surname} <br />
