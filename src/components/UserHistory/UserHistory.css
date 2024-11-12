@@ -1,13 +1,5 @@
-.room-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 10px;
-  margin: 10px;
-}
-
-.room-box {
-  background-color: #cacaca;
+.my-history {
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 20px;
@@ -18,20 +10,29 @@
   box-sizing: border-box;
 }
 
-.room-box h2 {
+.my-history h2 {
   color: #333;
 }
 
-.room-box p {
+.my-history p {
   margin: 10px 0;
   font-size: 16px;
   color: #555;
 }
 
-.room-box strong {
+.my-history strong {
   color: #222;
 }
 
-.access-details {
+.history-list {
   margin-top: 15px;
+}
+
+.reservation-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.reservation-item:last-child {
+  border-bottom: none;
 }
